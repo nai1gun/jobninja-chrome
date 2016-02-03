@@ -2,8 +2,7 @@
 'use strict';
 
 angular.module('jobninja', []).controller('MainController', function() {
+  var main = this;
 
-	var main = this;
-	
- 	main.param = 'Hello!';
+  main.param = 'Hello!';
 });
