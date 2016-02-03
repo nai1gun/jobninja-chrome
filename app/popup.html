@@ -11,9 +11,9 @@
     <!-- endbuild -->
   </head>
   <body ng-app="jobninja">
-    <div ng-controller="MainController">
-        <h1 ng-bind="param">Good bye!</h1>
-        <input ng-model="param"/>
+    <div ng-controller="MainController as main">
+        <h1 ng-bind="main.param">Good bye!</h1>
+        <input ng-model="main.param"/>
     </div>
 
     <!-- build:js scripts/popup-vendor.js -->
