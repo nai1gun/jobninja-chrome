@@ -11,19 +11,24 @@
     <!-- endbuild -->
   </head>
   <body ng-app="jobninja">
-    <div ng-controller="MainController as main">
-        <h1 ng-bind="main.param">Good bye!</h1>
-        <input ng-model="main.param"/>
+    <div class="container">
+      <ui-view/>
     </div>
 
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js scripts/popup.js -->
     <script src="scripts/popup.js"></script>
     <!-- endbuild -->
+
+    <!-- build:js scripts/login.js -->
+    <script src="scripts/login.js"></script>
+    <!-- endbuild -->
+
   </body>
 </html>

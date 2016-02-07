@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "dependencies": {
-  	"angular": "1.4.9"
+    "angular": "1.4.9",
+    "angular-ui-router": "^0.2.18"
   },
   "devDependencies": {
     "chai": "^3.5.0",

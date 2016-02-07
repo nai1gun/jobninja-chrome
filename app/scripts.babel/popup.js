@@ -1,8 +1,8 @@
 /* global angular */
 'use strict';
 
-angular.module('jobninja', []).controller('MainController', function() {
-  var main = this;
-
-  main.param = 'Hello!';
+angular.module('jobninja', ['ui.router'])
+.run(($rootScope, $state) => {
+	$rootScope.$on('$stateChangeError', console.log.bind(console));
+	$state.go('login');
 });
