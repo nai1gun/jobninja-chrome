@@ -9,13 +9,14 @@ angular.module('jobninja')
                 controller: 'LoginController'
             });
     })
-    .controller('LoginController', ($scope) => {
+    .controller('LoginController', ($scope, Auth) => {
 
         $scope.login = '';
 
         $scope.password = '';
 
         $scope.doLogin = function() {
+            Auth.login({username: $scope.login, password: $scope.password});
             console.log('Login success with: ' + $scope.login + ': ' + $scope.password);
         };
 
