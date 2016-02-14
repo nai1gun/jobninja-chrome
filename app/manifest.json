@@ -17,6 +17,7 @@
     ]
   },
   "permissions": [
+    "storage",
     "http://localhost:8080/*"
   ],
   "browser_action": {
