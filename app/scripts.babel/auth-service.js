@@ -5,7 +5,7 @@ angular.module('jobninja')
     .factory('Auth', ['config', '$http', '$q', function loginService(config, $http, $q) {
         return {
             login: function(credentials) {
-                return $q(function(resolve, reject) {                  
+                return $q(function(resolve, reject) {
                     var data = 'username=' + credentials.username + '&password='
                         + credentials.password + '&grant_type=password&scope=read%20write&' +
                         'client_secret=mySecretOAuthSecret&client_id=jhtestapp';
@@ -23,7 +23,7 @@ angular.module('jobninja')
                         chrome.storage.local.set({'token': token}, function() {
                             resolve(token);
                         });
-                    }, function(errorResponse) {                    
+                    }, function(errorResponse) {
                         reject(errorResponse.data);
                     });
                 });
@@ -36,20 +36,22 @@ angular.module('jobninja')
                         });
                     }, function(errorResponse) {
                         reject(errorResponse.data);
-                    });   
+                    });
                 });
             },
             getToken: function () {
                 return $q(function(resolve) {
-                    chrome.storage.local.get('token', function(token) {
-                        resolve(token);
+                    chrome.storage.local.get('token', function(result) {
+                        resolve((result && result.token) ? result.token : null);
                     });
                 });
             },
             hasValidToken: function () {
+                var self = this;
                 return $q(function(resolve) {
-                    this.getToken().then(function(token) {
-                        resolve(token && token.expiredAt && token.expiredAt > new Date().getTime());
+                    self.getToken().then(function(token) {
+                        var isValid = token && token.expiredAt && token.expiredAt > new Date().getTime();
+                        resolve(isValid);
                     });
                 });
             }
