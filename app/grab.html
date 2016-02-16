@@ -1,3 +1,13 @@
-<div>
-	<button style="white-space: nowrap;">Grab to Job Ninja</button>
+<div ng-if="hasPosition != null">
+    <div ng-if="hasPosition">
+        <button style="white-space: nowrap;" ng-click="grabPosition()">
+            Save to Job Ninja
+        </button>
+    </div>
+    <div ng-if="!hasPosition">
+        No position found on the page
+    </div>
+</div>
+<div ng-if="hasPosition == null">
+    Unexpected error
 </div>
