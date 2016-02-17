@@ -9,31 +9,41 @@ angular.module('jobninja')
                 controller: 'GrabController'
             });
     })
-    .controller('GrabController', ($scope) => {
+    .controller('GrabController', ($scope, GrabService) => {
 
         $scope.hasPosition = null;
 
         $scope.grabPosition = function() {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {method: 'grabPosition'}, function(response) {
-                    console.log('got position: ' + angular.toJson(response));
-                });
+            GrabService.grabPosition().then(function(position) {
+                console.log('got position: ' + angular.toJson(position));
             });
         };
 
         function loadHasPosition() {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {method: 'hasPosition'}, function(response) {
-                    $scope.$apply(function () {
-                        $scope.hasPosition = response;
-                    });
-                });
+            GrabService.hasPosition().then(function(hasPosition) {
+                $scope.hasPosition = hasPosition;
             });
         }
 
         loadHasPosition();
 
     })
-    .service('GrabService', () => {
+    .service('GrabService', ($q) => {
 
+        var invokeContentMethod = function(method) {
+            return function() {
+                return $q(function(resolve) {
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {method: method}, function(response) {
+                            resolve(response);
+                        });
+                    });
+                });
+            };
+        };
+
+        return {
+            grabPosition: invokeContentMethod('grabPosition'),
+            hasPosition: invokeContentMethod('hasPosition')
+        };
     });
