@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(
     });
 
 function hasPosition() {
-    return new Boolean($(JOB_POSTING_ELEMENT)[0]);
+    return Boolean($(JOB_POSTING_ELEMENT)[0]);
 }
 
 function getJobPosting() {
@@ -24,15 +24,17 @@ function getJobPosting() {
 }
 
 function getName() {
-    return getJobPosting().find('[itemprop="title"]').text();
+    return getJobPosting().find('[itemprop="title"]').first().text().trim();
 }
 
 function getCompany() {
-    return $('[itemtype="http://schema.org/Organization"]').find('[itemprop="name"]').text();
+    return $('[itemtype="http://schema.org/Organization"]').find('[itemprop="name"]').first().text().trim() ||
+        getJobPosting().find('[itemprop="hiringOrganization"]').first().text().trim();
+
 }
 
 function getLocation() {
-    return $('[itemtype="http://schema.org/PostalAddress"]').text();
+    return $('[itemtype="http://schema.org/PostalAddress"]').first().text().trim() || $('[itemprop="jobLocation"]').first().text().trim();
 }
 
 function getHref() {
