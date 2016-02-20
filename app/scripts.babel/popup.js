@@ -1,9 +1,12 @@
 /* global angular */
 'use strict';
 
-angular.module('jobninja', ['ui.router'])
+angular.module('jobninja', ['ui.router', 'ngResource'])
 .constant('config', {
   apiBaseUrl: 'http://localhost:8080/'
+})
+.config(($httpProvider) => {
+    $httpProvider.interceptors.push('authInterceptor');
 })
 .run(($rootScope, $state, Auth) => {
 	$rootScope.$on('$stateChangeError', console.log.bind(console));

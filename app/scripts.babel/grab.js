@@ -9,13 +9,16 @@ angular.module('jobninja')
                 controller: 'GrabController'
             });
     })
-    .controller('GrabController', ($scope, GrabService) => {
+    .controller('GrabController', ($scope, GrabService, Position) => {
 
         $scope.hasPosition = null;
 
         $scope.grabPosition = function() {
             GrabService.grabPosition().then(function(position) {
                 console.log('got position: ' + angular.toJson(position));
+                Position.save(position, function() {
+                    console.log('saved position: ' + angular.toJson(position));
+                });
             });
         };
 
@@ -46,4 +49,7 @@ angular.module('jobninja')
             grabPosition: invokeContentMethod('grabPosition'),
             hasPosition: invokeContentMethod('hasPosition')
         };
+    })
+    .service('Position', ($resource, config) => {
+        return $resource(config.apiBaseUrl + 'api/positions/:id', {});
     });

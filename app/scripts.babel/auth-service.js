@@ -17,9 +17,9 @@ angular.module('jobninja')
                         }
                     }).then(function(response) {
                         var token = response.data;
-                        var expiredAt = new Date();
-                        expiredAt.setSeconds(expiredAt.getSeconds() + token.expires_in);
-                        token.expiredAt = expiredAt.getTime();
+                        var expiresAt = new Date();
+                        expiresAt.setSeconds(expiresAt.getSeconds() + token.expires_in);
+                        token['expires_at'] = expiresAt.getTime();
                         chrome.storage.local.set({'token': token}, function() {
                             resolve(token);
                         });
@@ -52,6 +52,23 @@ angular.module('jobninja')
                     self.getToken().then(function(token) {
                         var isValid = token && token.expiredAt && token.expiredAt > new Date().getTime();
                         resolve(isValid);
+                    });
+                });
+            }
+        };
+    }])
+    .factory('authInterceptor', ['$q', function ($q) {
+        return {
+            // Add authorization token to headers
+            request: function (config) {
+                return $q(function(resolve) {
+                    chrome.storage.local.get('token', function(result) {
+                        config.headers = config.headers || {};
+                        var token = (result && result.token) ? result.token : null;
+                        if (token && token.expires_at && token.expires_at > new Date().getTime()) {
+                            config.headers.Authorization = 'Bearer ' + token.access_token;
+                        }
+                        resolve(config);
                     });
                 });
             }
