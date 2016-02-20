@@ -26,7 +26,7 @@ angular.module('jobninja')
                     $scope.error = 'Incorrect Username or passord';
                 } else {
                     var errMsg = 'Unexpected error';
-                    if (err && err.err.error_description) {
+                    if (err && err.error_description) {
                         errMsg += ' ' + err.error_description;
                     }
                     console.log(errMsg);

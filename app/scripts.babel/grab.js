@@ -15,7 +15,6 @@ angular.module('jobninja')
 
         $scope.grabPosition = function() {
             GrabService.grabPosition().then(function(position) {
-                console.log('got position: ' + angular.toJson(position));
                 Position.save(position, function() {
                     console.log('saved position: ' + angular.toJson(position));
                 });

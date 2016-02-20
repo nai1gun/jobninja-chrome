@@ -19,7 +19,7 @@ angular.module('jobninja')
                         var token = response.data;
                         var expiresAt = new Date();
                         expiresAt.setSeconds(expiresAt.getSeconds() + token.expires_in);
-                        token['expires_at'] = expiresAt.getTime();
+                        token.expires_at = expiresAt.getTime();
                         chrome.storage.local.set({'token': token}, function() {
                             resolve(token);
                         });
@@ -50,7 +50,7 @@ angular.module('jobninja')
                 var self = this;
                 return $q(function(resolve) {
                     self.getToken().then(function(token) {
-                        var isValid = token && token.expiredAt && token.expiredAt > new Date().getTime();
+                        var isValid = token && token.expires_at && token.expires_at > new Date().getTime();
                         resolve(isValid);
                     });
                 });

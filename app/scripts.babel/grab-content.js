@@ -2,9 +2,39 @@
 'use strict';
 
 
+var DateUtils = function () {
+    return {
+        convertLocaleDateToServer: function(date) {
+            if (date) {
+              return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),
+                  date.getHours(), date.getMinutes(), date.getSeconds()));
+            } else {
+              return null;
+            }
+        },
+        convertLocaleDateFromServer: function(date) {
+            if (date) {
+              var dateString = date.split('-');
+              return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+            }
+            return null;
+        },
+        convertDateTimeFromServer: function(date) {
+            if (date) {
+              return new Date(date);
+            } else {
+              return null;
+            }
+        }
+    };
+};
+
+
 var SchemaOrgJobPosting = function() {
 
     var JOB_POSTING_ELEMENT = '[itemtype="http://schema.org/JobPosting"]';
+
+    var dateUtils = new DateUtils();
 
     var getJobPosting = function() {
         return $(JOB_POSTING_ELEMENT);
@@ -33,11 +63,15 @@ var SchemaOrgJobPosting = function() {
             return Boolean($(JOB_POSTING_ELEMENT)[0]);
         },
         grabPosition: function() {
+            var date = dateUtils.convertLocaleDateToServer(new Date()).toISOString();
             var position = {
                 name: getName(),
                 company: getCompany(),
                 location: getLocation(),
-                link: getHref()
+                link: getHref(),
+                created: date,
+                edited: date,
+                state: 'Created'
             };
             return position;
         }
