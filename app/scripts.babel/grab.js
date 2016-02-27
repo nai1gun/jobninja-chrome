@@ -9,14 +9,14 @@ angular.module('jobninja')
                 controller: 'GrabController'
             });
     })
-    .controller('GrabController', ($scope, GrabService, Position) => {
+    .controller('GrabController', ($scope, $state, GrabService, Position) => {
 
         $scope.hasPosition = null;
 
         $scope.grabPosition = function() {
             GrabService.grabPosition().then(function(position) {
-                Position.save(position, function() {
-                    console.log('saved position: ' + angular.toJson(position));
+                Position.save(position, function(result) {
+                    $state.go('saved', {position: result});
                 });
             });
         };

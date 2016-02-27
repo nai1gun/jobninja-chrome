@@ -10,6 +10,9 @@ angular.module('jobninja', ['ui.router', 'ngResource'])
 })
 .run(($rootScope, $state, Auth) => {
 	$rootScope.$on('$stateChangeError', console.log.bind(console));
+
+    chrome.browserAction.setBadgeText({text: ''});
+
     Auth.hasValidToken().then(function(hasValidToken) {
         if (hasValidToken) {
             $state.go('grab');
