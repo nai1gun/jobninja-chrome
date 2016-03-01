@@ -2,8 +2,10 @@
     <div>Please log in to Job Ninja</div>
     <div ng-show="error" ng-bind="error"></div>
     <div ng-click="clearError()">
-    	<label>Login</label><input ng-model="login"/>
-    	<label>Password</label><input type="password" ng-model="password"/>
-    	<button type="button" ng-click="doLogin()">Login</button>
+        <form>
+            <label>Login</label><input ng-model="login"/>
+            <label>Password</label><input type="password" ng-model="password"/>
+            <button type="submit" ng-click="doLogin()">Login</button>
+        </form>
     </div>
 </div>
