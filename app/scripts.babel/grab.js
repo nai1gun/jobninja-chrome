@@ -46,7 +46,8 @@ angular.module('jobninja')
 
         return {
             grabPosition: invokeContentMethod('grabPosition'),
-            hasPosition: invokeContentMethod('hasPosition')
+            hasPosition: invokeContentMethod('hasPosition'),
+            getHref: invokeContentMethod('getHref')
         };
     })
     .service('Position', ($resource, config) => {

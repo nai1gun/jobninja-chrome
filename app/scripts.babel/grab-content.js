@@ -74,6 +74,9 @@ var SchemaOrgJobPosting = function() {
                 state: 'Created'
             };
             return position;
+        },
+        getHref: function() {
+            return getHref();
         }
     };
 };

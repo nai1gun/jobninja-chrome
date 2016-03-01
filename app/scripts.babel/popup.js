@@ -8,16 +8,27 @@ angular.module('jobninja', ['ui.router', 'ngResource'])
 .config(($httpProvider) => {
     $httpProvider.interceptors.push('authInterceptor');
 })
-.run(($rootScope, $state, Auth) => {
+.run(($rootScope, $state, Auth, PositionFind, GrabService) => {
 	$rootScope.$on('$stateChangeError', console.log.bind(console));
 
     chrome.browserAction.setBadgeText({text: ''});
 
     Auth.hasValidToken().then(function(hasValidToken) {
         if (hasValidToken) {
-            $state.go('grab');
+            GrabService.getHref().then(function(href) {
+                PositionFind.query({link: href}, function(positions) {
+                    if (positions && positions.length) {
+                        $state.go('saved', {position: positions[0]});
+                    } else {
+                        $state.go('grab');
+                    }
+                });
+            });
         } else {
             $state.go('login');
         }
     });
+})
+.service('PositionFind', ($resource, config) => {
+    return $resource(config.apiBaseUrl + 'api/positions/find', {link: '@link'});
 });
