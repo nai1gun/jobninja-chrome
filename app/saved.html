@@ -1,11 +1,11 @@
 <div>
-    <p>
-        "<span style="white-space: nowrap;" ng-bind="position.name"></span>" is saved!
-    </p>
-    <p>
-        <a href="#" ng-click="openPosition()">See on JobNinja</a>
-    </p>
-    <p>
-        <a href="#" ng-click="closePopup()">Close</a>
-    </p>
+    <div class="alert alert-success">
+        "<span class="text-nowrap" ng-bind="position.name"></span>" is saved!
+    </div>
+    <div class="text-nowrap">
+        <button type="button" class="btn btn-link" ng-click="openPosition()">
+            See on JobNinja
+        </button>
+        <button type="button" class="btn btn-default" ng-click="closePopup()">Close</button>
+    </div>
 </div>

@@ -1,13 +1,13 @@
 <div ng-if="hasPosition != null">
     <div ng-if="hasPosition">
-        <button style="white-space: nowrap;" ng-click="grabPosition()">
+        <button class="btn btn-success text-nowrap" ng-click="grabPosition()">
             Save to Job Ninja
         </button>
     </div>
-    <div style="white-space: nowrap;" ng-if="!hasPosition">
+    <div class="alert alert-info text-nowrap" ng-if="!hasPosition">
         No position found<br>on the page
     </div>
 </div>
-<div ng-if="hasPosition == null">
+<div class="alert alert-danger" ng-if="hasPosition == null">>
     Unexpected error
 </div>
