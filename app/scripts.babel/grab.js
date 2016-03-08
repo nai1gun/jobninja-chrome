@@ -9,12 +9,12 @@ angular.module('jobninja')
                 controller: 'GrabController'
             });
     })
-    .controller('GrabController', ($scope, $state, GrabService, Position) => {
+    .controller('GrabController', ($scope, $state, ContentService, Position) => {
 
         $scope.hasPosition = null;
 
         $scope.grabPosition = function() {
-            GrabService.grabPosition().then(function(position) {
+            ContentService.grabPosition().then(function(position) {
                 Position.save(position, function(result) {
                     $state.go('saved', {position: result});
                 });
@@ -22,33 +22,18 @@ angular.module('jobninja')
         };
 
         function loadHasPosition() {
-            GrabService.hasPosition().then(function(hasPosition) {
+            ContentService.hasPosition().then(function(hasPosition) {
                 $scope.hasPosition = hasPosition;
+                if (!hasPosition) {
+                    ContentService.createSidePanel();
+                    window.close();
+                }
+
             });
         }
 
         loadHasPosition();
 
-    })
-    .service('GrabService', ($q) => {
-
-        var invokeContentMethod = function(method) {
-            return function() {
-                return $q(function(resolve) {
-                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id, {method: method}, function(response) {
-                            resolve(response);
-                        });
-                    });
-                });
-            };
-        };
-
-        return {
-            grabPosition: invokeContentMethod('grabPosition'),
-            hasPosition: invokeContentMethod('hasPosition'),
-            getHref: invokeContentMethod('getHref')
-        };
     })
     .service('Position', ($resource, config) => {
         return $resource(config.apiBaseUrl + 'api/positions/:id', {});

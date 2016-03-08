@@ -8,26 +8,57 @@ angular.module('jobninja', ['ui.router', 'ngResource'])
 .config(($httpProvider) => {
     $httpProvider.interceptors.push('authInterceptor');
 })
-.run(($rootScope, $state, Auth, PositionFind, GrabService) => {
+.run(($rootScope, $state, Auth, PositionFind, ContentService) => {
 	$rootScope.$on('$stateChangeError', console.log.bind(console));
 
     chrome.browserAction.setBadgeText({text: ''});
 
-    Auth.hasValidToken().then(function(hasValidToken) {
-        if (hasValidToken) {
-            GrabService.getHref().then(function(href) {
-                PositionFind.query({link: href}, function(positions) {
-                    if (positions && positions.length) {
-                        $state.go('saved', {position: positions[0]});
-                    } else {
-                        $state.go('grab');
-                    }
-                });
+    ContentService.panelExists().then(function(panelExists) {
+        if (panelExists) {
+            ContentService.removePanel().then(function() {
+                window.close();
             });
         } else {
-            $state.go('login');
+            Auth.hasValidToken().then(function(hasValidToken) {
+                if (hasValidToken) {
+                    ContentService.getHref().then(function(href) {
+                        PositionFind.query({link: href}, function(positions) {
+                            if (positions && positions.length) {
+                                $state.go('saved', {position: positions[0]});
+                            } else {
+                                $state.go('grab');
+                            }
+                        });
+                    });
+                } else {
+                    $state.go('login');
+                }
+            });
         }
     });
+})
+.service('ContentService', ($q) => {
+
+    var invokeContentMethod = function(method) {
+        return function() {
+            return $q(function(resolve) {
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {method: method}, function(response) {
+                        resolve(response);
+                    });
+                });
+            });
+        };
+    };
+
+    return {
+        grabPosition: invokeContentMethod('grabPosition'),
+        hasPosition: invokeContentMethod('hasPosition'),
+        getHref: invokeContentMethod('getHref'),
+        createSidePanel: invokeContentMethod('createSidePanel'),
+        panelExists: invokeContentMethod('panelExists'),
+        removePanel: invokeContentMethod('removePanel')
+    };
 })
 .service('PositionFind', ($resource, config) => {
     return $resource(config.apiBaseUrl + 'api/positions/find', {link: '@link'});

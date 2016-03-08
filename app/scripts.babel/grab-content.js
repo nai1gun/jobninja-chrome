@@ -85,5 +85,7 @@ var parser = new SchemaOrgJobPosting();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        sendResponse(parser[request.method]());
+        if (parser[request.method]) {
+            sendResponse(parser[request.method]());
+        }
     });
