@@ -1,4 +1,4 @@
-/* global $, chrome */
+/* global $ */
 'use strict';
 
 
@@ -80,12 +80,3 @@ var SchemaOrgJobPosting = function() {
         }
     };
 };
-
-var parser = new SchemaOrgJobPosting();
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (parser[request.method]) {
-            sendResponse(parser[request.method]());
-        }
-    });

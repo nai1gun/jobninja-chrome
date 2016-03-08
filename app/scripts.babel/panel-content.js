@@ -1,4 +1,4 @@
-/* global $, chrome */
+/* global $ */
 'use strict';
 var SidePanel = function() {
 
@@ -66,12 +66,3 @@ var SidePanel = function() {
     };
 
 };
-
-var panel = new SidePanel();
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (panel[request.method]) {
-            sendResponse(panel[request.method]());
-        }
-    });

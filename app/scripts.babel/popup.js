@@ -39,12 +39,15 @@ angular.module('jobninja', ['ui.router', 'ngResource'])
 })
 .service('ContentService', ($q) => {
 
-    var invokeContentMethod = function(method) {
+    var invokeContentMethod = function(component, method) {
         return function() {
             return $q(function(resolve) {
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, {method: method}, function(response) {
-                        resolve(response);
+                    chrome.tabs.sendMessage(
+                        tabs[0].id, 
+                        {component: component, method: method}, 
+                        function(response) {
+                            resolve(response);
                     });
                 });
             });
@@ -52,12 +55,12 @@ angular.module('jobninja', ['ui.router', 'ngResource'])
     };
 
     return {
-        grabPosition: invokeContentMethod('grabPosition'),
-        hasPosition: invokeContentMethod('hasPosition'),
-        getHref: invokeContentMethod('getHref'),
-        createSidePanel: invokeContentMethod('createSidePanel'),
-        panelExists: invokeContentMethod('panelExists'),
-        removePanel: invokeContentMethod('removePanel')
+        grabPosition: invokeContentMethod('parser', 'grabPosition'),
+        hasPosition: invokeContentMethod('parser', 'hasPosition'),
+        getHref: invokeContentMethod('parser', 'getHref'),
+        createSidePanel: invokeContentMethod('panel', 'createSidePanel'),
+        panelExists: invokeContentMethod('panel', 'panelExists'),
+        removePanel: invokeContentMethod('panel', 'removePanel')
     };
 })
 .service('PositionFind', ($resource, config) => {
