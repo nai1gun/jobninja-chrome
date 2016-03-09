@@ -13,6 +13,8 @@ angular.module('jobninja')
 
         $scope.hasPosition = null;
 
+        $scope.loading = true;
+
         $scope.grabPosition = function() {
             ContentService.grabPosition().then(function(position) {
                 Position.save(position, function(result) {
@@ -24,6 +26,7 @@ angular.module('jobninja')
         function loadHasPosition() {
             ContentService.hasPosition().then(function(hasPosition) {
                 $scope.hasPosition = hasPosition;
+                $scope.loading = false;
                 if (!hasPosition) {
                     ContentService.createSidePanel();
                     window.close();

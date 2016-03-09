@@ -1,0 +1,14 @@
+#job-ninja-panel-wrapper {
+    position: fixed; 
+    border:none; 
+    z-index: 2147483647; 
+    top: 0;
+    right: 0;
+}
+
+.job-ninja-panel-component {
+    background-color: white; 
+    width: 150px; 
+    height: auto; 
+    float: right;
+}

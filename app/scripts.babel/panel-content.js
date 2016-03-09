@@ -4,8 +4,6 @@ var SidePanel = function() {
 
     var IFRAME_ID = 'job-ninja-panel-wrapper';
 
-    var PANEL_WIDTH = '150px';
-
     var getHtmlElement = function() {
         var html;
         if (document.documentElement) {
@@ -27,37 +25,43 @@ var SidePanel = function() {
     var injectIframe = function(html) {
         if (!panelExists()) {
             html.append(
-              '<iframe id="' + IFRAME_ID + '" scrolling="no" frameborder="0" ' +
-                'style="position: fixed; width: ' + PANEL_WIDTH + '; border:none; z-index: 2147483647; top: 0px;' +
-                       'height: 100%; right: 0px;">' +
-              '</iframe>'
+              '<iframe id="' + IFRAME_ID + '" scrolling="no" frameborder="0"></iframe>'
             );
         }
     };
 
-    var injectStyle = function() {
-        document.getElementById(IFRAME_ID).contentDocument.body.innerHTML =
-          '<style type="text/css">       \
-            html, body {                 \
-              height: 100%;              \
-              width: 100%;               \
-              z-index: 2147483647;       \
-              margin: 0;                 \
-            }                            \
-          </style>';
+    var injectStyles = function() {
+        $('#job-ninja-panel-wrapper').contents().find('head, body')
+            .css('height', 'auto')
+            .css('width', 'auto')
+            .css('z-index', 2147483647)
+            .css('margin', 0);
+        $('#' + IFRAME_ID).contents().find('head').append(
+            '<link  type="text/css" rel="stylesheet" href="' +
+                chrome.extension.getURL('styles/panel.css') + '"/>');
     };
 
     var injectHtml = function() {
-        document.getElementById(IFRAME_ID).contentDocument.body.innerHTML +=
-            '<div style="background-color: white; width: 100%; height: 100%; float: right;">' +
-                'Dummy content!<br><br><br><br><br><br><br><br><br><br><br><br>end</div>';
+        $('#' + IFRAME_ID).contents().find('body').append(
+            '<div class="job-ninja-panel-component">' +
+                'Dummy content!<br><br><br><br><br><br><br><br><br><br><br><br>end</div>');
+    };
+
+    var adjustIframeSize = function() {
+        var iFrame = $('#' + IFRAME_ID);
+        var iFrameBody = iFrame.contents().find('body')[0];
+        var newHeight = iFrameBody.scrollHeight;
+        var newWidth = iFrameBody.scrollWidth;
+        iFrame.height(newHeight + 'px');
+        iFrame.width(newWidth + 'px');
     };
 
     return {
         createSidePanel: function() {
             injectIframe(getHtmlElement());
-            injectStyle();
+            injectStyles();
             injectHtml();
+            adjustIframeSize();
         },
         panelExists: panelExists,
         removePanel: function() {
