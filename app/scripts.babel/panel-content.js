@@ -36,15 +36,18 @@ var SidePanel = function() {
             .css('width', 'auto')
             .css('z-index', 2147483647)
             .css('margin', 0);
-        $('#' + IFRAME_ID).contents().find('head').append(
-            '<link  type="text/css" rel="stylesheet" href="' +
-                chrome.extension.getURL('styles/panel.css') + '"/>');
+        appendCssFile('bower_components/bootstrap/dist/css/bootstrap.min.css');
+        appendCssFile('styles/panel.css');
     };
 
-    var injectHtml = function() {
-        $('#' + IFRAME_ID).contents().find('body').append(
-            '<div class="job-ninja-panel-component">' +
-                'Dummy content!<br><br><br><br><br><br><br><br><br><br><br><br>end</div>');
+    var appendCssFile = function(filePath) {
+       $('#' + IFRAME_ID).contents().find('head').append(
+            '<link  type="text/css" rel="stylesheet" href="' +
+                chrome.extension.getURL(filePath) + '"/>'); 
+    }
+
+    var injectHtml = function(callback) {
+        $('#' + IFRAME_ID).contents().find('body').load(chrome.extension.getURL('panel.html'), callback);
     };
 
     var adjustIframeSize = function() {
@@ -60,8 +63,7 @@ var SidePanel = function() {
         createSidePanel: function() {
             injectIframe(getHtmlElement());
             injectStyles();
-            injectHtml();
-            adjustIframeSize();
+            injectHtml(adjustIframeSize);
         },
         panelExists: panelExists,
         removePanel: function() {
