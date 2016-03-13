@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, chrome */
 'use strict';
 var SidePanel = function() {
 
@@ -22,12 +22,22 @@ var SidePanel = function() {
         return document.getElementById(IFRAME_ID) != null;
     };
 
+    var removePanel = function() {
+        $('#' + IFRAME_ID).remove();
+    };
+
     var injectIframe = function(html) {
         if (!panelExists()) {
             html.append(
               '<iframe id="' + IFRAME_ID + '" scrolling="no" frameborder="0"></iframe>'
             );
         }
+    };
+
+    var appendCssFile = function(filePath) {
+       $('#' + IFRAME_ID).contents().find('head').append(
+            '<link  type="text/css" rel="stylesheet" href="' +
+                chrome.extension.getURL(filePath) + '"/>');
     };
 
     var injectStyles = function() {
@@ -39,12 +49,6 @@ var SidePanel = function() {
         appendCssFile('bower_components/bootstrap/dist/css/bootstrap.min.css');
         appendCssFile('styles/panel.css');
     };
-
-    var appendCssFile = function(filePath) {
-       $('#' + IFRAME_ID).contents().find('head').append(
-            '<link  type="text/css" rel="stylesheet" href="' +
-                chrome.extension.getURL(filePath) + '"/>'); 
-    }
 
     var injectHtml = function(callback) {
         $('#' + IFRAME_ID).contents().find('body').load(chrome.extension.getURL('panel.html'), callback);
@@ -59,16 +63,26 @@ var SidePanel = function() {
         iFrame.width(newWidth + 'px');
     };
 
+    var addEventLiteners = function() {
+        $(function() {
+            $('#' + IFRAME_ID).contents().find('#job-ninja-panel-submit').click(function() {
+                chrome.runtime.sendMessage({context: 'background', component: 'background', method: 'openPopup'});
+                removePanel();
+            });
+        });
+    };
+
     return {
         createSidePanel: function() {
             injectIframe(getHtmlElement());
             injectStyles();
-            injectHtml(adjustIframeSize);
+            injectHtml(function() {
+                adjustIframeSize();
+                addEventLiteners();
+            });
         },
         panelExists: panelExists,
-        removePanel: function() {
-            $('#' + IFRAME_ID).remove();
-        }
+        removePanel: removePanel
     };
 
 };

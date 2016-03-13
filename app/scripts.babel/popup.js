@@ -45,7 +45,7 @@ angular.module('jobninja', ['ui.router', 'ngResource'])
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                     chrome.tabs.sendMessage(
                         tabs[0].id,
-                        {component: component, method: method},
+                        {context: 'content', component: component, method: method},
                         function(response) {
                             resolve(response);
                     });

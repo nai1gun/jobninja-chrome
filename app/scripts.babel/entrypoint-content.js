@@ -29,5 +29,7 @@ var context = new ApplicationContext();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        sendResponse(context.invoke(request.component, request.method));
+        if (request.context === 'content') {
+            sendResponse(context.invoke(request.component, request.method));
+        }
     });

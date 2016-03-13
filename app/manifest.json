@@ -27,6 +27,7 @@
   ],
   "web_accessible_resources": ["panel.html", "styles/panel.css", "bower_components/bootstrap/dist/css/bootstrap.min.css"],
   "permissions": [
+    "notifications",
     "storage",
     "tabs", 
     "<all_urls>"
