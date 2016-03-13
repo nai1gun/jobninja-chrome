@@ -7,10 +7,10 @@ var Background = function() {
 
     return {
         openPopup: function() {
-            chrome.notifications.create(NEW_POSITION_NOTIFICATION_ID, 
+            chrome.notifications.create(NEW_POSITION_NOTIFICATION_ID,
                 {
                     type: 'basic',
-                    title: 'Position added',
+                    title: '\'Test Job\' position was added to Job Ninja',
                     message: 'Click here to see on Job Ninja',
                     iconUrl: 'images/icon-38.png',
                     isClickable: true
