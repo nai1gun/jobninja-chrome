@@ -66,7 +66,11 @@ var SidePanel = function() {
     var addEventLiteners = function() {
         $(function() {
             $('#' + IFRAME_ID).contents().find('#job-ninja-panel-submit').click(function() {
-                chrome.runtime.sendMessage({context: 'background', component: 'background', method: 'openPopup'});
+                var position = $('#' + IFRAME_ID).contents().find('#job-ninja-panel-form').serializeObject();
+                position.link = window.location.href;
+                chrome.runtime.sendMessage({context: 'background', component: 'background', method: 'savePosition',
+                    params: {position: position}
+                });
                 removePanel();
             });
         });
@@ -85,4 +89,20 @@ var SidePanel = function() {
         removePanel: removePanel
     };
 
+};
+
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
 };
