@@ -16,3 +16,7 @@
     border-bottom: 1px solid #ccc;
     border-bottom-left-radius: 4px;
 }
+
+#job-ninja-panel-submit {
+    width: 100%;
+}

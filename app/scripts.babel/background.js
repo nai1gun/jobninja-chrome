@@ -38,7 +38,7 @@ var Background = function() {
                 type: 'basic',
                 title: `\'${position.name}\' position was added to Job Ninja`,
                 message: 'Click here to see on Job Ninja',
-                iconUrl: 'images/icon-38.png',
+                iconUrl: 'images/icon-128.png',
                 isClickable: true
             }
         );

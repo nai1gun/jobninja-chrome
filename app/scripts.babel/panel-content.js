@@ -64,14 +64,23 @@ var SidePanel = function() {
     };
 
     var addEventLiteners = function() {
+        function doSubmit() {
+            var position = $('#' + IFRAME_ID).contents().find('#job-ninja-panel-form').serializeObject();
+            position.link = window.location.href;
+            chrome.runtime.sendMessage({context: 'background', component: 'background', method: 'savePosition',
+                params: {position: position}
+            });
+            removePanel();
+        }
         $(function() {
             $('#' + IFRAME_ID).contents().find('#job-ninja-panel-submit').click(function() {
-                var position = $('#' + IFRAME_ID).contents().find('#job-ninja-panel-form').serializeObject();
-                position.link = window.location.href;
-                chrome.runtime.sendMessage({context: 'background', component: 'background', method: 'savePosition',
-                    params: {position: position}
-                });
-                removePanel();
+                doSubmit();
+            });
+            $('#' + IFRAME_ID).contents().find('input').keypress(function(event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    doSubmit();
+                }
             });
         });
     };
