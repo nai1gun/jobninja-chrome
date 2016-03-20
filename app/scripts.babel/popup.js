@@ -1,9 +1,13 @@
 /* global angular */
 'use strict';
 
+function ifDefined(value) {
+    return value === 'undefined' ? undefined : value;
+}
+
 angular.module('jobninja', ['ui.router', 'ngResource'])
 .constant('config', {
-  apiBaseUrl: 'http://localhost:8080/'
+  apiBaseUrl: ifDefined('/* @echo jobNinja.api.baseUrl */') || 'http://localhost:8080/'
 })
 .config(($httpProvider) => {
     $httpProvider.interceptors.push('authInterceptor');

@@ -1,0 +1,7 @@
+{
+    "jobNinja": {
+        "api": {
+            "baseUrl": "http://job-ninja.herokuapp.com/"
+        }
+    }
+}

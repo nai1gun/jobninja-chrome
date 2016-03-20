@@ -1,6 +1,15 @@
 /* global chrome, $ */
 'use strict';
 
+
+function ifDefined(value) {
+    return value === 'undefined' ? undefined : value;
+}
+
+var config = {
+    apiBaseUrl: ifDefined('/* @echo jobNinja.api.baseUrl */')
+};
+
 var Background = function() {
 
     var NEW_POSITION_NOTIFICATION_ID = 'job-ninja-new-position';
@@ -22,7 +31,7 @@ var Background = function() {
     var doSavePosition = function(position, callback) {
         getHeaders(function(headers) {
             $.ajax({
-                url: 'http://localhost:8080/api/positions',
+                url: config.apiBaseUrl + 'api/positions',
                 method: 'POST',
                 headers: headers,
                 data: JSON.stringify(position)
@@ -45,7 +54,7 @@ var Background = function() {
         chrome.notifications.onClicked.addListener(function(notificationId) {
             if (notificationId === NEW_POSITION_NOTIFICATION_ID) {
                 chrome.notifications.clear(NEW_POSITION_NOTIFICATION_ID);
-                chrome.tabs.create({url: 'http://localhost:8080/#/position/' + position.id});
+                chrome.tabs.create({url: `${config.apiBaseUrl}#/position/${position.id}`});
             }
         });
     };
@@ -69,7 +78,7 @@ chrome.runtime.onMessage.addListener(function(request) {
         if (background[request.method]) {
             background[request.method](request.params);
         } else {
-            throw 'Method ' + request.method + 'is not found in background component';
+            throw `Method ${request.method} is not found in background component`;
         }
     }
 });

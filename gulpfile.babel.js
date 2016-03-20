@@ -84,7 +84,12 @@ gulp.task('chromeManifest', () => {
 });
 
 gulp.task('babel', () => {
+  var environment = process.env.NODE_ENV || 'dev';
+  var fs = require('fs');
+  var config = JSON.parse(fs.readFileSync(`./config.${environment}.json`));
+
   return gulp.src('app/scripts.babel/**/*.js')
+      .pipe($.preprocess({context: config}))
       .pipe($.babel({
         presets: ['es2015']
       }))
