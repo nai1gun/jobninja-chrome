@@ -84,21 +84,32 @@ gulp.task('chromeManifest', () => {
 });
 
 gulp.task('babel', () => {
-  var environment = process.env.NODE_ENV || 'dev';
-  var fs = require('fs');
-  var config = JSON.parse(fs.readFileSync(`./config.${environment}.json`));
-
   return gulp.src('app/scripts.babel/**/*.js')
-      .pipe($.preprocess({context: config}))
       .pipe($.babel({
         presets: ['es2015']
       }))
       .pipe(gulp.dest('app/scripts'));
 });
 
+gulp.task('config', () => {
+  var environment = process.env.NODE_ENV || 'dev';
+  var fs = require('fs');
+  var config = JSON.parse(fs.readFileSync(`./config.${environment}.json`));
+
+  return gulp.src('app/scripts/**/*.js')
+      .pipe($.preprocess({context: config}))
+      .pipe(gulp.dest('app/scripts'));
+});
+
+gulp.task('ngAnnotate', () => {
+  return gulp.src('app/scripts/**/*.js')
+      .pipe($.ngAnnotate())
+      .pipe(gulp.dest('app/scripts'));
+});
+
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'babel', 'html'], () => {
+gulp.task('watch', ['lint', 'babel', 'config', 'ngAnnotate', 'html'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -134,7 +145,7 @@ gulp.task('package', function () {
 
 gulp.task('build', (cb) => {
   runSequence(
-    'lint', 'babel', 'chromeManifest',
+    'lint', 'babel', 'config', 'ngAnnotate', 'chromeManifest',
     ['html', 'images', 'extras'],
     'size', cb);
 });
