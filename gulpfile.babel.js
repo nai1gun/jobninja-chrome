@@ -11,6 +11,7 @@ gulp.task('extras', () => {
   return gulp.src([
     'app/*.*',
     'app/_locales/**',
+    'app/bower_components/bootstrap/dist/css/bootstrap.min.css', // hack! TODO: pull request to ragingwind/gulp-chrome-manifest
     '!app/scripts.babel',
     '!app/*.json',
     '!app/*.html',
@@ -68,7 +69,7 @@ gulp.task('html',  () => {
 gulp.task('chromeManifest', () => {
   return gulp.src('app/manifest.json')
     .pipe($.chromeManifest({
-      buildnumber: true,
+      buildnumber: false,
       background: {
         target: 'scripts/background.js',
         exclude: [
