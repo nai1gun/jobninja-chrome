@@ -18,4 +18,16 @@
         </div>
         <button type="submit" class="btn btn-primary" ng-click="doLogin()">Login</button>
     </form>
+    <div class="show-social-link">
+        <a href="" ng-click="showSocial=!showSocial">social login</a>
+    </div>
+    <div class="show-social-box bg-warning ng-hide" ng-show="showSocial">
+        If you are registered with a social account you can get your login from the <a href="" ng-click="pageLink('settings')">settings</a> page and setup the password on the <a href="" ng-click="pageLink('password')">password</a> page.
+    </div>
+    <div>
+        <a href="" ng-click="pageLink('reset/request')">forgot password?</a>
+    </div>
+    <div>
+        <a href="" ng-click="pageLink('register')">register</a>
+    </div>
 </div>

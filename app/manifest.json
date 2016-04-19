@@ -1,6 +1,6 @@
 {
   "name": "Job Ninja",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "manifest_version": 2,
   "description": "Job Ninja web clipper. Saves a position from any job board to Job Ninja application.",
   "icons": {

@@ -16,10 +16,10 @@ var ApplicationContext = function() {
                 if (method) {
                     return method();
                 } else {
-                    throw 'No method "' + methodName + '" in component "' + componentName + '"';
+                    throw `No method "${methodName}" in component "${componentName}"`;
                 }
             } else {
-                throw 'No component with name: ' + componentName;
+                throw `No component with name: ${componentName}`;
             }
         }
     };

@@ -9,7 +9,7 @@ angular.module('jobninja')
                 controller: 'LoginController'
             });
     })
-    .controller('LoginController', ($scope, $state, Auth) => {
+    .controller('LoginController', ($scope, $state, config, Auth) => {
 
         $scope.login = '';
 
@@ -37,6 +37,10 @@ angular.module('jobninja')
 
         $scope.clearError = function() {
             $scope.error = null;
+        };
+
+        $scope.pageLink = function(page) {
+            chrome.tabs.create({url: `${config.apiBaseUrl}#/${page}`});
         };
 
     });
